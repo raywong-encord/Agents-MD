@@ -17,7 +17,29 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 
 ## What to compute
 
-### 1. New target account owners (by CA)
+### 1. Tier 0/1 unowned
+- Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
+- For each of those companies, check HubSpot for an **open deal in the Encord Opportunity Pipeline** (`DEAL.pipeline = 'default'` AND `hs_is_open_count = 1`, matched via the deal's associated company). Split the unowned accounts into two groups on this basis.
+- **Output as two tables.**
+
+  **Table 1a — Unowned, NO open deal (priority concern).** Lead with this. Validated Tier 0/1 accounts with no owner and nothing in the pipeline:
+
+  | Tier | Accounts Unowned (no open deal) |
+  |---|---|
+
+  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
+
+  **Table 1b — Unowned, WITH open deal.** Live deal but no target account owner (likely a tagging gap rather than a coverage gap):
+
+  | Tier | Accounts Unowned (open deal) |
+  |---|---|
+
+  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
+
+- Do NOT append a "lifecycle stage customer excluded" note to the heading — the exclusion is applied silently in the query.
+- This section should be empty on a healthy day. If it's not empty, it goes at the top, with **Table 1a (no open deal) first** as the highest-priority list.
+
+### 2. New target account owners (by CA)
 - Identify every account that was **assigned a new owner** in the window.
 - **First run:** no previous run to bound against, so read the **last 129 messages** in the channel as the baseline. Subsequent runs use the last 24h (since the previous run).
 - Group by CA (owner). Each CA is **one row**, with all their new accounts listed together in a single cell.
@@ -28,28 +50,6 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
   |---|---|
 
   Example row: `George Lim (+19)` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO`
-
-### 2. Tier 0/1 unowned
-- Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
-- For each of those companies, check HubSpot for an **open deal in the Encord Opportunity Pipeline** (`DEAL.pipeline = 'default'` AND `hs_is_open_count = 1`, matched via the deal's associated company). Split the unowned accounts into two groups on this basis.
-- **Output as two tables.**
-
-  **Table 2a — Unowned, NO open deal (priority concern).** Lead with this. Validated Tier 0/1 accounts with no owner and nothing in the pipeline:
-
-  | Tier | Accounts Unowned (no open deal) |
-  |---|---|
-
-  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
-
-  **Table 2b — Unowned, WITH open deal.** Live deal but no target account owner (likely a tagging gap rather than a coverage gap):
-
-  | Tier | Accounts Unowned (open deal) |
-  |---|---|
-
-  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
-
-- Do NOT append a "lifecycle stage customer excluded" note to the heading — the exclusion is applied silently in the query.
-- This section should be empty on a healthy day. If it's not empty, it goes at the top, with **Table 2a (no open deal) first** as the highest-priority list.
 
 ### 3. Target account owner volume chart (HubSpot)
 - Query companies where **`target_account_owner`** is **known (not empty)** and group by that field.
