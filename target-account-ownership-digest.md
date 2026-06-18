@@ -56,7 +56,7 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 {single table: Tier | Accounts Unowned — row 1 Tier 0, row 2 Tier 1}
 {or: "✅ None — all validated Tier 0/1 accounts owned"}
 
-🆕 NEW OWNERS (last 24h)
+🆕 NEW TARGET ACCOUNT OWNERS ASSIGNED
 {single table: Name | Accounts | Number of New Accounts (Δ) — one row per CA}
 {omit section if none}
 
