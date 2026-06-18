@@ -10,6 +10,7 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
   - Validated tier property: **`account_icp_tier_validated`** ("ICP Tier (Validated)"). Values: `Tier 0`, `Tier 1`, `Tier 2`, `Tier 3`, `Tier 4`, `DQ`, `Insufficient Information`.
   - **Use validated tiering only.** Do NOT use `account_icp__tier_new` (Automated Account ICP Tiering) or any other tier property for the exception check.
   - Reference report (optional): https://app-eu1.hubspot.com/reports-dashboard/25381551/view/112851152/310951648
+  - Open-deal check (section 2): a deal is "open in the Encord Opportunity Pipeline" when `DEAL.pipeline = 'default'` (label "Encord Opportunity Pipeline") AND `DEAL.hs_is_open_count = 1`, matched to the company via deal↔company association.
 
 ## Schedule
 - Run once daily, ~08:00 (before standup). Adjust as needed.
@@ -21,24 +22,34 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 - **First run:** no previous run to bound against, so read the **last 129 messages** in the channel as the baseline. Subsequent runs use the last 24h (since the previous run).
 - Group by CA (owner). Each CA is **one row**, with all their new accounts listed together in a single cell.
 - Show a per-CA number of new target accounts added
-- **Format as a single table** with three columns, one row per CA, sorted by number of new accounts (descending):
+- **Format as a single table** with two columns, one row per CA, sorted by number of new accounts (descending):
 
-  | Name (Number of New Accounts) | Accounts | 
+  | Name (Number of New Accounts) | Accounts |
   |---|---|
 
-  Example row: `George Lim (+19)` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO` | 
+  Example row: `George Lim (+19)` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO`
 
 ### 2. Tier 0/1 unowned
 - Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
-- **Format as a single table** with two rows — Tier 0 first, then Tier 1 — with all unowned accounts for that tier collapsed into a single cell:
+- For each of those companies, check HubSpot for an **open deal in the Encord Opportunity Pipeline** (`DEAL.pipeline = 'default'` AND `hs_is_open_count = 1`, matched via the deal's associated company). Split the unowned accounts into two groups on this basis.
+- **Output as two tables.**
 
-  | Tier | Accounts Unowned |
+  **Table 2a — Unowned, NO open deal (priority concern).** Lead with this. Validated Tier 0/1 accounts with no owner and nothing in the pipeline:
+
+  | Tier | Accounts Unowned (no open deal) |
   |---|---|
 
-  Example: `Tier 0` | `Mind Robotics, World Labs, Skild, …` and `Tier 1` | `Embo, Vestiaire Collective,…, AWS`|
+  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
+
+  **Table 2b — Unowned, WITH open deal.** Live deal but no target account owner (likely a tagging gap rather than a coverage gap):
+
+  | Tier | Accounts Unowned (open deal) |
+  |---|---|
+
+  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
 
 - Do NOT append a "lifecycle stage customer excluded" note to the heading — the exclusion is applied silently in the query.
-- This section should be empty on a healthy day. If it's not empty, it goes at the top.
+- This section should be empty on a healthy day. If it's not empty, it goes at the top, with **Table 2a (no open deal) first** as the highest-priority list.
 
 ### 3. Target account owner volume chart (HubSpot)
 - Query companies where **`target_account_owner`** is **known (not empty)** and group by that field.
@@ -47,17 +58,18 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 
 ## Output format
 
-Keep it short and scannable. Same body for Slack and email (email gets a subject line). Lead with the exception section.
+Keep it short and scannable. Lead with the exception section.
 
 ```
 📋 Target Account Ownership — {DATE}
 
 ⚠️ TIER 0/1 UNOWNED ({n})
-{single table: Tier | Accounts Unowned — row 1 Tier 0, row 2 Tier 1}
+Table 2a — NO open deal (priority): {Tier | Accounts Unowned (no open deal)} — row 1 Tier 0, row 2 Tier 1
+Table 2b — WITH open deal: {Tier | Accounts Unowned (open deal)} — row 1 Tier 0, row 2 Tier 1
 {or: "✅ None — all validated Tier 0/1 accounts owned"}
 
 🆕 NEW TARGET ACCOUNT OWNERS ASSIGNED
-{single table: Name | Accounts | Number of New Accounts (Δ) — one row per CA}
+{single table: Name (Number of New Accounts) | Accounts — one row per CA}
 {omit section if none}
 
 📈 TARGET ACCOUNTS OWNED
@@ -66,22 +78,22 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 
 - Lead with the exception section always — even when empty — so the reader can trust it was checked.
 - Omit "New owners" entirely if there were none that day.
-- **One table per section maximum.** Sections 1 and 2 each render as a single table; never split a section into multiple tables (use sorting/grouping columns instead).
+- **Keep tables minimal.** Section 1 renders as a single table. Section 2 renders as exactly two tables (2a no-deal, 2b with-deal); never more. Use sorting/grouping columns instead of additional tables.
 - No long preamble. No restating the methodology in the digest itself.
 - Do NOT append an approval-pending footer or a standing-baseline / tier-filter recommendation note to the digest body.
 
 ## Delivery
 
-Produce the digest body once, then deliver to three places:
+Produce the digest body once, then deliver to two places:
 
 1. **Slack channel** (`C0BBEUSBATY`) — post the digest + chart.
 2. **Personal Slack DM** to Ray — same body + chart.
 
 ### Approval gate
-- **Personal Slack DM to Ray:** send **without approval** (goes only to Ray) 
-- **Slack channel post** send **without approval** 
+- **Personal Slack DM to Ray:** send **without approval** (goes only to Ray)
+- **Slack channel post** send **without approval**
 
 ## Edge cases
 - **No activity in 24h:** send a one-line digest ("No ownership changes in the last 24h.") plus the volume chart, and still run the Tier 0/1 exception check.
-- **HubSpot field names:** `target_account_owner` (owner), `account_icp_tier_validated` (validated tier), `lifecyclestage` (lifecycle). Confirmed against the portal.
+- **HubSpot field names:** `target_account_owner` (owner), `account_icp_tier_validated` (validated tier), `lifecyclestage` (lifecycle), `pipeline` / `hs_is_open_count` (deals). Confirmed against the portal.
 - **Validated vs automated tier:** the exception check uses validated tier only. If validated tier is blank for an account, it is not flagged (no fallback to automated tiering).
