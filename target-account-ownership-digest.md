@@ -71,9 +71,8 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 
 Produce the digest body once, then deliver to three places:
 
-1. **Slack channel** (`C0BB9PYPCUT`) — post the digest.
-2. **Personal Slack DM** to Ray — same body.
-3. **Gmail to Ray** — subject: `Target Account Ownership Digest — {DATE}`, body = digest.
+1. **Personal Slack DM** to Ray — same body.
+2. **Gmail to Ray** — subject: `Target Account Ownership Digest — {DATE}`, body = digest.
 
 ### Approval gate (important)
 All three are send-on-behalf actions. For the **first several runs**, do NOT auto-send:
