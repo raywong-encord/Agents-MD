@@ -19,19 +19,13 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 
 ### 1. Tier 0/1 unowned
 - Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
-- For each of those companies, check HubSpot for an **open deal in the Encord Opportunity Pipeline** (`DEAL.pipeline = 'default'` AND `hs_is_open_count = 1`, matched via the deal's associated company). Split the unowned accounts into two groups on this basis.
-- **Output as two tables.**
+- For each of those companies, check HubSpot for **No open deal in the Encord Opportunity Pipeline** (`DEAL.pipeline = 'default'` AND `hs_is_open_count = 0`, matched via the deal's associated company).
+  
+- **Output as one tables.**
 
-  **Table 1a — Unowned, NO open deal (priority concern).** Lead with this. Validated Tier 0/1 accounts with no owner and nothing in the pipeline:
+  **Unowned Accounts, No open deals.** Lead with this. Validated Tier 0/1 accounts with no owner and nothing in the pipeline:
 
   | Tier | Accounts Unowned (no open deal) |
-  |---|---|
-
-  Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
-
-  **Table 1b — Unowned, WITH open deal.** Live deal but no target account owner (likely a tagging gap rather than a coverage gap):
-
-  | Tier | Accounts Unowned (open deal) |
   |---|---|
 
   Two rows — Tier 0 first, then Tier 1 — accounts collapsed into a single cell per tier.
@@ -40,7 +34,7 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 - This section should be empty on a healthy day. If it's not empty, it goes at the top, with **Table 1a (no open deal) first** as the highest-priority list.
 
 ### 2. New target account owners (by CA)
-- Identify every account that was **assigned a new owner** in the window.
+- Identify every account that was **assigned a new owner** in the last 24 hours.
 - **First run:** no previous run to bound against, so read the **last 129 messages** in the channel as the baseline. Subsequent runs use the last 24h (since the previous run).
 - Group by CA (owner). Each CA is **one row**, with all their new accounts listed together in a single cell.
 - Show a per-CA number of new target accounts added
@@ -63,14 +57,15 @@ Keep it short and scannable. Lead with the exception section.
 ```
 📋 Target Account Ownership — {DATE}
 
-⚠️ TIER 0/1 UNOWNED ({n})
-Table 2a — NO open deal (priority): {Tier | Accounts Unowned (no open deal)} — row 1 Tier 0, row 2 Tier 1
-Table 2b — WITH open deal: {Tier | Accounts Unowned (open deal)} — row 1 Tier 0, row 2 Tier 1
+⚠️ TIER 0/1 UNOWNED ACCOUNTS ({n})
+{single table: Tier | Accounts Unowned (no open deal)} — row 1 Tier 0, row 2 Tier 1
 {or: "✅ None — all validated Tier 0/1 accounts owned"}
+
 
 🆕 NEW TARGET ACCOUNT OWNERS ASSIGNED
 {single table: Name (Number of New Accounts) | Accounts — one row per CA}
 {omit section if none}
+
 
 📈 TARGET ACCOUNTS OWNED
 {attached bar chart image — or inline text bars if image unsupported}
@@ -78,7 +73,7 @@ Table 2b — WITH open deal: {Tier | Accounts Unowned (open deal)} — row 1 Tie
 
 - Lead with the exception section always — even when empty — so the reader can trust it was checked.
 - Omit "New owners" entirely if there were none that day.
-- **Keep tables minimal.** Section 1 renders as a single table. Section 2 renders as exactly two tables (2a no-deal, 2b with-deal); never more. Use sorting/grouping columns instead of additional tables.
+- **Keep tables minimal.** Section 1 renders as a single table. Section 1 renders as a single table. Use sorting/grouping columns instead of additional tables.
 - No long preamble. No restating the methodology in the digest itself.
 - Do NOT append an approval-pending footer or a standing-baseline / tier-filter recommendation note to the digest body.
 
