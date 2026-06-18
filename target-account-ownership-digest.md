@@ -20,15 +20,15 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 - Identify every account that was **assigned a new owner** in the window.
 - **First run:** no previous run to bound against, so read the **last 129 messages** in the channel as the baseline. Subsequent runs use the last 24h (since the previous run).
 - Group by CA (owner). Each CA is **one row**, with all their new accounts listed together in a single cell.
-- Show a per-CA count of new target accounts added, with the change vs. the previous digest (▲ increase / ▼ decrease / — no change). On the first run there is no prior digest to compare against, so show all CAs with — as the baseline.
+- Show a per-CA number of new target accounts added
 - **Format as a single table** with three columns, one row per CA, sorted by number of new accounts (descending):
 
   | Name | Accounts | Number of New Accounts |
   |---|---|---|
 
-  Example row: `George Lim` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO` | `19 (—)`
+  Example row: `George Lim` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO` | `+19`
 
-### 2. Tier 0/1 unowned — EXCEPTIONS (lead with this)
+### 2. Tier 0/1 unowned
 - Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
 - **Format as a single table** with two rows — Tier 0 first, then Tier 1 — with all unowned accounts for that tier collapsed into a single cell:
 
