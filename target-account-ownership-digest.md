@@ -76,11 +76,10 @@ Produce the digest body once, then deliver to three places:
 
 1. **Slack channel** (`C0BB9PYPCUT`) — post the digest + chart.
 2. **Personal Slack DM** to Ray — same body + chart.
-3. **Gmail to Ray** — subject: `Target Account Ownership Digest — {DATE}`, body = digest, chart attached.
 
 ### Approval gate
-- **Personal Slack DM to Ray:** send **without approval** (goes only to Ray). Applies from the first run.
-- **Slack channel post** and **email:** for the first several runs, draft and surface for explicit approval before sending. Keep the public channel post on manual approval longest.
+- **Personal Slack DM to Ray:** send **without approval** (goes only to Ray) 
+- **Slack channel post** send **without approval** 
 
 ## Edge cases
 - **No activity in 24h:** send a one-line digest ("No ownership changes in the last 24h.") plus the volume chart, and still run the Tier 0/1 exception check.
