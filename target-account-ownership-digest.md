@@ -19,21 +19,23 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 ### 1. New target account owners (by CA)
 - Identify every account that was **assigned a new owner** in the window.
 - **First run:** no previous run to bound against, so read the **last 129 messages** in the channel as the baseline. Subsequent runs use the last 24h (since the previous run).
-- Group by CA (owner). For each CA, list the account names.
+- Group by CA (owner). Each CA is **one row**, with all their new accounts listed together in a single cell.
 - Show a per-CA count of new target accounts added, with the change vs. the previous digest (▲ increase / ▼ decrease / — no change). On the first run there is no prior digest to compare against, so show all CAs with — as the baseline.
-- **Format as a single table** (one table for the whole section — not one table per CA). One row per new account, sorted so all of a CA's rows sit together (CA ordered by new-account count, descending):
+- **Format as a single table** with three columns, one row per CA, sorted by number of new accounts (descending):
 
-  | CA (Owner) | Account | New Target Accounts Added (Δ) |
+  | Name | Accounts | Number of New Accounts |
   |---|---|---|
 
-  Repeat the CA name and `New Target Accounts Added (Δ)` on each of that CA's rows (e.g. `George Lim` / `19 (▲3)`) so it stays one flat table rather than separate per-CA blocks.
+  Example row: `George Lim` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO` | `19 (—)`
 
 ### 2. Tier 0/1 unowned — EXCEPTIONS (lead with this)
 - Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
-- **Format as a single table** (one table for the whole section). Use the tier as a column and sort Tier 0 rows first, then Tier 1 — do not split into two separate tables:
+- **Format as a single table** with two rows — Tier 0 first, then Tier 1 — with all unowned accounts for that tier collapsed into a single cell:
 
-  | Validated Tier | Account |
+  | Tier | Accounts Unowned |
   |---|---|
+
+  Example: `Tier 0` | `Mind Robotics, World Labs, Skild, …` and `Tier 1` | `Embo, Vestiaire Collective, AWS, …`
 
 - Do NOT append a "lifecycle stage customer excluded" note to the heading — the exclusion is applied silently in the query.
 - This section should be empty on a healthy day. If it's not empty, it goes at the top.
@@ -51,11 +53,11 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 📋 Target Account Ownership — {DATE}
 
 ⚠️ TIER 0/1 UNOWNED ({n})
-{single table: Validated Tier | Account — Tier 0 rows first, then Tier 1}
+{single table: Tier | Accounts Unowned — row 1 Tier 0, row 2 Tier 1}
 {or: "✅ None — all validated Tier 0/1 accounts owned"}
 
 🆕 NEW OWNERS (last 24h)
-{single table: CA (Owner) | Account | New Target Accounts Added (Δ) — rows grouped by CA}
+{single table: Name | Accounts | Number of New Accounts (Δ) — one row per CA}
 {omit section if none}
 
 📈 OWNERSHIP VOLUME (HubSpot, by target account owner)
