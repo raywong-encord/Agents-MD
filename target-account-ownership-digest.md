@@ -19,29 +19,28 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 ### 1. New target account owners (by CA)
 - Identify every account that was **assigned a new owner** in the window.
 - **First run:** no previous run to bound against, so read the **last 129 messages** in the channel as the baseline. Subsequent runs use the last 24h (since the previous run).
-- Group by CA (owner). For each CA, list: account name, validated tier (if stated).
-- Show a per-CA count and the change vs. the previous digest (▲/▼/—).
-- **Format as a table** (Slack table / email table), not a bulleted list. One row per CA (owner):
+- Group by CA (owner). For each CA, list the account names.
+- Show a per-CA count of new target accounts added, with the change vs. the previous digest (▲ increase / ▼ decrease / — no change). On the first run there is no prior digest to compare against, so show all CAs with — as the baseline.
+- **Format as a single table** (one table for the whole section — not one table per CA). One row per new account, sorted so all of a CA's rows sit together (CA ordered by new-account count, descending):
 
-  | CA (Owner) | Account | Validated Tier | New / Reassigned |
-  |---|---|---|---|
+  | CA (Owner) | Account | New Target Accounts Added (Δ) |
+  |---|---|---|
 
-  Group rows by CA, with the per-CA count and Δ in a subheader or a leading summary row, e.g. `George Lim: 19 new (—)`.
+  Repeat the CA name and `New Target Accounts Added (Δ)` on each of that CA's rows (e.g. `George Lim` / `19 (▲3)`) so it stays one flat table rather than separate per-CA blocks.
 
 ### 2. Tier 0/1 unowned — EXCEPTIONS (lead with this)
 - Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
-- **Format as a table, split by validated tier** (Tier 0 block, then Tier 1 block):
+- **Format as a single table** (one table for the whole section). Use the tier as a column and sort Tier 0 rows first, then Tier 1 — do not split into two separate tables:
 
   | Validated Tier | Account |
   |---|---|
 
 - Do NOT append a "lifecycle stage customer excluded" note to the heading — the exclusion is applied silently in the query.
-- This section should only show the table as the output
 - This section should be empty on a healthy day. If it's not empty, it goes at the top.
 
 ### 3. Target account owner volume chart (HubSpot)
 - Query companies where **`target_account_owner`** is **known (not empty)** and group by that field.
-- Produce a ** bar chart** of accounts owned per person — one bar per owner, count on the value axis, sorted descending.
+- Produce a **vertical bar chart** of accounts owned per person — one bar per owner, count on the value axis, sorted descending.
 - Render as an image (PNG) to attach to Slack and email; if a static image isn't possible, fall back to inline text bars, e.g. `Andrew Bell ████████ 18`.
 
 ## Output format
@@ -52,19 +51,20 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 📋 Target Account Ownership — {DATE}
 
 ⚠️ TIER 0/1 UNOWNED ({n})
-{table, split by validated tier — Tier 0 rows then Tier 1 rows}
+{single table: Validated Tier | Account — Tier 0 rows first, then Tier 1}
 {or: "✅ None — all validated Tier 0/1 accounts owned"}
 
 🆕 NEW OWNERS (last 24h)
-{table: CA | Account | Validated Tier | New/Reassigned, grouped by CA with per-CA count + Δ}
+{single table: CA (Owner) | Account | New Target Accounts Added (Δ) — rows grouped by CA}
 {omit section if none}
 
 📈 OWNERSHIP VOLUME (HubSpot, by target account owner)
 {attached bar chart image — or inline text bars if image unsupported}
 ```
 
-- Lead with the exception section always — unless it's empty.
+- Lead with the exception section always — even when empty — so the reader can trust it was checked.
 - Omit "New owners" entirely if there were none that day.
+- **One table per section maximum.** Sections 1 and 2 each render as a single table; never split a section into multiple tables (use sorting/grouping columns instead).
 - No long preamble. No restating the methodology in the digest itself.
 - Do NOT append an approval-pending footer or a standing-baseline / tier-filter recommendation note to the digest body.
 
@@ -72,7 +72,7 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 
 Produce the digest body once, then deliver to three places:
 
-1. **Slack channel** (`C0BBEUSBATY`) — post the digest + chart.
+1. **Slack channel** (`C0BB9PYPCUT`) — post the digest + chart.
 2. **Personal Slack DM** to Ray — same body + chart.
 3. **Gmail to Ray** — subject: `Target Account Ownership Digest — {DATE}`, body = digest, chart attached.
 
