@@ -23,10 +23,10 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
 - Show a per-CA number of new target accounts added
 - **Format as a single table** with three columns, one row per CA, sorted by number of new accounts (descending):
 
-  | Name | Accounts | Number of New Accounts |
-  |---|---|---|
+  | Name (Number of New Accounts) | Accounts | 
+  |---|---|
 
-  Example row: `George Lim` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO` | `+19`
+  Example row: `George Lim (+19)` | `3M, OSEDEA, AISPRID, Safari AI, …, CARTO` | 
 
 ### 2. Tier 0/1 unowned
 - Query companies where **`account_icp_tier_validated`** is `Tier 0` or `Tier 1`, **`target_account_owner` is empty**, and **`lifecyclestage` ≠ `customer`**.
@@ -35,7 +35,7 @@ Read the `#target-account-ownership` Slack channel each day, summarise ownership
   | Tier | Accounts Unowned |
   |---|---|
 
-  Example: `Tier 0` | `Mind Robotics, World Labs, Skild, …` and `Tier 1` | `Embo, Vestiaire Collective, AWS, …`
+  Example: `Tier 0` | `Mind Robotics, World Labs, Skild, …` and `Tier 1` | `Embo, Vestiaire Collective,…, AWS`|
 
 - Do NOT append a "lifecycle stage customer excluded" note to the heading — the exclusion is applied silently in the query.
 - This section should be empty on a healthy day. If it's not empty, it goes at the top.
@@ -60,7 +60,7 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 {single table: Name | Accounts | Number of New Accounts (Δ) — one row per CA}
 {omit section if none}
 
-📈 OWNERSHIP VOLUME (HubSpot, by target account owner)
+📈 TARGET ACCOUNTS OWNED
 {attached bar chart image — or inline text bars if image unsupported}
 ```
 
