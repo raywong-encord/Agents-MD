@@ -74,7 +74,7 @@ Keep it short and scannable. Same body for Slack and email (email gets a subject
 
 Produce the digest body once, then deliver to three places:
 
-1. **Slack channel** (`C0BB9PYPCUT`) — post the digest + chart.
+1. **Slack channel** (`C0BBEUSBATY`) — post the digest + chart.
 2. **Personal Slack DM** to Ray — same body + chart.
 
 ### Approval gate
