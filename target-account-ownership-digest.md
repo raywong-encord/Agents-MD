@@ -82,7 +82,6 @@ Keep it short and scannable. Lead with the exception section.
 Produce the digest body once, then deliver to two places:
 
 1. **Slack channel** (`C0BBEUSBATY`) — post the digest + chart.
-2. **Personal Slack DM** to Ray — same body + chart.
 
 ### Approval gate
 - **Personal Slack DM to Ray:** send **without approval** (goes only to Ray)
