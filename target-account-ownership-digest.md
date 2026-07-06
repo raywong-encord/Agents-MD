@@ -84,7 +84,6 @@ Produce the digest body once, then deliver to two places:
 1. **Slack channel** (`C0BBEUSBATY`) — post the digest + chart.
 
 ### Approval gate
-- **Personal Slack DM to Ray:** send **without approval** (goes only to Ray)
 - **Slack channel post** send **without approval**
 
 ## Edge cases
