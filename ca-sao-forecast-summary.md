@@ -1,7 +1,7 @@
 # Routine: CA SAO Forecast Summary
 
 ## Purpose
-Read the CA SAO Forecast Google Sheet, compute total and per-CA forecasted SAOs for the current month (excluding disqualified accounts), split by confidence tier, and send a Slack DM to Ray Wong.
+Read the CA SAO Forecast Google Sheet, compute total and per-CA forecasted SAOs for the current month (excluding disqualified accounts), split by confidence tier, and send a Slack DM to the channel 'C0BBEUSBATY'.
 
 ## Sources
 - **Google Sheet:** https://docs.google.com/spreadsheets/d/1mRmRJwR6luPAhqCNAc2gzpzOu66EaJKHgLGW2-Rf3oA/edit?gid=1885521022#gid=1885521022
@@ -76,7 +76,7 @@ Total forecasted SAOs: *{N}* (disqualified accounts excluded)
 - Omit `*Not filled in:*` entirely if all CAs have at least one named account.
 
 ## Delivery
-- **Slack DM → Ray Wong** (`U09J17D8H26`) — send **without approval**.
+- **Slack DM** (`C0BBEUSBATY`) — send **without approval**.
 
 ## Edge cases
 - **Disqualified rows:** silently excluded from all counts and tables. Do not flag them in the output.
